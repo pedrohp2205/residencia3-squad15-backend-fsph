@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  M
+  F
+  O
+}
+
+enum BloodType {
+  A_POS
+  A_NEG
+  B_POS
+  B_NEG
+  AB_POS
+  AB_NEG
+  O_POS
+  O_NEG
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  profile  Profile?
+  posts    Post[]
+  likes    Like[]
+  comments Comment[]
+  accounts OAuthAccount[] // <- contas sociais
+}
+
+model Profile {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  cpf       String?    @unique
+  phone     String?
+  gender    Gender?
+  bloodType BloodType?
+  completed Boolean    @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  authorId  String
+  content   String
+  mediaUrl  String?
+  createdAt DateTime @default(now())
+
+  author   User      @relation(fields: [authorId], references: [id])
+  likes    Like[]
+  comments Comment[]
+}
+
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+}
+
+model OAuthAccount {
+  id         String @id @default(uuid())
+  provider   String
+  providerId String
+  userId     String
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerId])
+  @@index([userId])
+}
