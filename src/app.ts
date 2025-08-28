@@ -1,11 +1,13 @@
 import fastifyJwt from "@fastify/jwt";
-// import fastifyCookie from "@fastify/cookie";
+import fastifyCookie from "@fastify/cookie";
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { env } from "./infra/env";
 import { usersRoutes } from "./http/controllers/users/routes";
+import { authRoutes } from "./http/controllers/auth/routes";
 
 export const app = fastify();
+const prefix = { prefix: "/api/v1" };
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
@@ -18,7 +20,10 @@ app.register(fastifyJwt, {
   },
 });
 
-app.register(usersRoutes, { prefix: '/api/v1'})
+app.register(fastifyCookie);
+
+app.register(usersRoutes, prefix);
+app.register(authRoutes, prefix);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
