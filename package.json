@@ -20,6 +20,7 @@
     "@fastify/jwt": "^8.0.1",
     "@prisma/client": "^6.14.0",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.1",
     "fastify": "^4.28.1",
     "google-auth-library": "^9.15.0",
