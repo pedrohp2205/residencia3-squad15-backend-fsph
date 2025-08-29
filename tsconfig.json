@@ -12,6 +12,10 @@
     "strict": true,
     "skipLibCheck": true,
     "declaration": true,
+    "baseUrl": "./",                                    
+    "paths": {
+      "@/*": ["./src/*"]
+    },        
     "typeRoots": [
       "node_modules/@types",
       "src/@types"
