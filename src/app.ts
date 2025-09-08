@@ -5,6 +5,8 @@ import { ZodError } from "zod";
 import { env } from "./infra/env";
 import { usersRoutes } from "./http/controllers/users/routes";
 import { authRoutes } from "./http/controllers/auth/routes";
+import fastifyMultipart from "@fastify/multipart";
+import { postsRoutes } from "./http/controllers/posts/routes";
 
 export const app = fastify();
 const prefix = { prefix: "/api/v1" };
@@ -22,8 +24,19 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie);
 
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+    files: 1,
+    fields: 10,
+  },
+  throwFileSizeLimit: true,
+  // attachFieldsToBody: true,
+});
+
 app.register(usersRoutes, prefix);
 app.register(authRoutes, prefix);
+app.register(postsRoutes, prefix);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
