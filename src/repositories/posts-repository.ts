@@ -1,8 +1,36 @@
 import { Post, Prisma } from "@prisma/client";
 
+export type PostWithRelations = Prisma.PostGetPayload<{
+  include: {
+    author: {
+      select: {
+        id: true;
+        name: true;
+        email: true;
+      };
+    };
+    comments: {
+      include: {
+        user: {
+          select: {
+            id: true;
+            name: true;
+            email: true;
+          };
+        };
+      };
+    };
+    _count: {
+      select: {
+        likes: true;
+      };
+    };
+  };
+}>;
+
 export interface PostsRepository {
   create(data: Prisma.PostUncheckedCreateInput): Promise<string>;
-  findAll(): Promise<Post[]>;
+  findAll(): Promise<PostWithRelations[]>;
   likePost({
     postId,
     userId,

@@ -1,5 +1,5 @@
 import { Post, Prisma } from "@prisma/client";
-import { PostsRepository } from "../posts-repository";
+import { PostsRepository, PostWithRelations } from "../posts-repository";
 import { prisma } from "@/infra/prisma";
 
 export class PrismaPostsRepository implements PostsRepository {
@@ -70,10 +70,35 @@ export class PrismaPostsRepository implements PostsRepository {
     return post.id;
   }
 
-  async findAll(): Promise<Post[]> {
+  async findAll(): Promise<PostWithRelations[]> {
     const posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        comments: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
       },
     });
     return posts;
