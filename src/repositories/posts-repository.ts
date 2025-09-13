@@ -49,4 +49,13 @@ export interface PostsRepository {
     postId: string;
     userId: string;
   }): Promise<boolean>;
+  commentPost({
+    postId,
+    userId,
+    content,
+  }: {
+    postId: string;
+    userId: string;
+    content: string;
+  }): Promise<void>;
 }

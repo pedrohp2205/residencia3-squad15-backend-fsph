@@ -103,4 +103,22 @@ export class PrismaPostsRepository implements PostsRepository {
     });
     return posts;
   }
+
+  async commentPost({
+    postId,
+    userId,
+    content,
+  }: {
+    postId: string;
+    userId: string;
+    content: string;
+  }): Promise<void> {
+    await prisma.comment.create({
+      data: {
+        postId,
+        userId,
+        text: content,
+      },
+    });
+  }
 }
