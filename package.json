@@ -23,6 +23,7 @@
     "@fastify/jwt": "^9.1.0",
     "@fastify/multipart": "^9.2.1",
     "@prisma/client": "^6.14.0",
+    "axios": "^1.12.2",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.1",

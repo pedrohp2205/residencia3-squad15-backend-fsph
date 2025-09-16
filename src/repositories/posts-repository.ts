@@ -28,9 +28,15 @@ export type PostWithRelations = Prisma.PostGetPayload<{
   };
 }>;
 
+export type PostDTO = PostWithRelations & { hasLiked: boolean };
+
 export interface PostsRepository {
   create(data: Prisma.PostUncheckedCreateInput): Promise<string>;
-  findAll(): Promise<PostWithRelations[]>;
+  findAll(params?: {
+    currentUserId?: string;
+    take?: number;
+    cursor?: string;
+  }): Promise<PostDTO[]>;
   likePost({
     postId,
     userId,
