@@ -1,6 +1,6 @@
 import { PrismaPostsRepository } from "@/repositories/prisma/prisma-posts-repository";
 import { PrismaUsersRepository } from "../../repositories/prisma/prisma-users-repository";
-import { CommentPostUseCase } from "../comment-post";
+import { CommentPostUseCase } from "../posts/comment-post";
 
 export function makeCommentPostUseCase() {
   const usersRepository = new PrismaUsersRepository();

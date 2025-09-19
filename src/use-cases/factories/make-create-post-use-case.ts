@@ -1,8 +1,7 @@
 import { PrismaPostsRepository } from "@/repositories/prisma/prisma-posts-repository";
 import { PrismaUsersRepository } from "../../repositories/prisma/prisma-users-repository";
-import { RegisterUseCase } from "../register";
 import { R2Provider } from "@/infra/r2-provider";
-import { CreatePostUseCase } from "../create-post";
+import { CreatePostUseCase } from "../posts/create-post";
 
 export function makeCreatePostUseCase() {
   const usersRepository = new PrismaUsersRepository();

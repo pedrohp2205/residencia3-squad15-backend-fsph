@@ -1,7 +1,7 @@
-import { UsersRepository } from "../repositories/users-repository";
+import { UsersRepository } from "@/repositories/users-repository";
 import { PostsRepository } from "@/repositories/posts-repository";
-import { UserNotFoundError } from "./errors/user-not-found-error";
-import { PostNotFoundError } from "./errors/post-not-found-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
+import { PostNotFoundError } from "../errors/post-not-found-error";
 
 interface LikePostUseCaseRequest {
   postId: string;

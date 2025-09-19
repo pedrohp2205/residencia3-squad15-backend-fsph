@@ -3,7 +3,7 @@ import {
   PostsRepository,
   PostWithRelations,
 } from "@/repositories/posts-repository";
-import { PostNotFoundError } from "./errors/post-not-found-error";
+import { PostNotFoundError } from "../errors/post-not-found-error";
 
 interface FetchPostsUseCaseRequest {
   currentUserId?: string;

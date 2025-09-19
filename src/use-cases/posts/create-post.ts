@@ -1,8 +1,8 @@
 import { StorageProvider } from "@/storage/storage-provider";
-import { UsersRepository } from "../repositories/users-repository";
+import { UsersRepository } from "@/repositories/users-repository";
 import { PostsRepository } from "@/repositories/posts-repository";
-import { UserNotFoundError } from "./errors/user-not-found-error";
-import { InvalidAttachmentTypeError } from "./errors/invalid-attachment-type-error";
+import { UserNotFoundError } from "../errors/user-not-found-error";
+import { InvalidAttachmentTypeError } from "../errors/invalid-attachment-type-error";
 
 interface CreatePostUseCaseRequest {
   authorId: string;
