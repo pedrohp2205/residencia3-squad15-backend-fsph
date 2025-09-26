@@ -49,8 +49,8 @@ export interface CancelAppointmentParams {
 }
 
 export interface FpshGateway {
-  getUserProfile(cpf: string): Promise<unknown>;
-  getUserAppointments(cpf: string): Promise<unknown>;
+  getDonorProfile(cpf: string): Promise<unknown>;
+  getDonorAppointments(cpf: string): Promise<unknown>;
   getAvailableCities(
     params: AppointmentType
   ): Promise<GetAvailableCitiesApiResponse>;

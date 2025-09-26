@@ -29,12 +29,12 @@ export class AxiosFpshGateway implements FpshGateway {
     return [n.perm_individual, n.perm_medula, n.perm_campanha];
   }
 
-  async getUserProfile(cpf: string): Promise<unknown> {
+  async getDonorProfile(cpf: string): Promise<unknown> {
     const { data } = await fpshApi.get(`/apiagendamento/doador/getinfo/${cpf}`);
     return data;
   }
 
-  async getUserAppointments(cpf: string): Promise<unknown> {
+  async getDonorAppointments(cpf: string): Promise<unknown> {
     const { data } = await fpshApi.get(
       `/apiagendamento/agendamento/agendamentos/${cpf}`
     );

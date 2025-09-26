@@ -1,7 +1,11 @@
-import { prisma } from '../../infra/prisma'
-import { Prisma } from '@prisma/client'
+import { prisma } from "../../infra/prisma";
+import { Prisma } from "@prisma/client";
 
-import { UsersRepository } from '../users-repository'
+import {
+  CreateUserWithCpfInput,
+  UsersRepository,
+  UserWithProfile,
+} from "../users-repository";
 
 export class PrismaUsersRepository implements UsersRepository {
   async findById(id: string) {
@@ -9,9 +13,9 @@ export class PrismaUsersRepository implements UsersRepository {
       where: {
         id,
       },
-    })
+    });
 
-    return user
+    return user;
   }
 
   async findByEmail(email: string) {
@@ -19,16 +23,37 @@ export class PrismaUsersRepository implements UsersRepository {
       where: {
         email,
       },
-    })
+      include: { profile: true },
+    });
 
-    return user
+    return user;
   }
 
-  async create(data: Prisma.UserCreateInput) {
+  async create(data: CreateUserWithCpfInput): Promise<UserWithProfile> {
     const user = await prisma.user.create({
-      data,
-    })
+      data: {
+        name: data.name,
+        email: data.email,
+        passwordHash: data.passwordHash,
+        profile: {
+          create: {
+            cpf: data.profile.create.cpf,
+          },
+        },
+      },
+      include: { profile: true },
+    });
 
-    return user
+    return user;
+  }
+
+  async cpfExists(cpf: string): Promise<boolean> {
+    const user = await prisma.profile.findUnique({
+      where: {
+        cpf,
+      },
+    });
+
+    return user !== null;
   }
 }
