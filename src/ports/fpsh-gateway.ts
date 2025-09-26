@@ -1,12 +1,16 @@
+import { GetAvailableCitiesApiResponse } from "@/@types/appointments/appointmentsFpsh";
+
 export interface PermissionsParams {
   perm_individual: string;
   perm_medula: string;
   perm_campanha: string;
 }
 
-export type AppointmentType = "D" | "M";
+export type AppointmentType = "D" | "M" | "C"; // D: Doação, M: Medula, C: Campanha
 
 export type Gender = "M" | "F" | "O";
+
+type AppointmentTypeWithoutCampaign = Omit<AppointmentType, "C">;
 
 export interface MakeAppointmentBody {
   donorName: string;
@@ -15,7 +19,7 @@ export interface MakeAppointmentBody {
   donorCpf: string;
   donorPhone: string;
   donorGender: Gender;
-  type: AppointmentType;
+  type: AppointmentTypeWithoutCampaign;
   donationBlockId: string;
   authorizationPath?: string;
 }
@@ -35,7 +39,7 @@ export interface MakeCampaignAppointmentBody {
 export interface EditAppointmentBody {
   donorBirthDate?: string;
   donorCpf: string;
-  type?: AppointmentType;
+  type?: AppointmentTypeWithoutCampaign;
   donationBlockId?: string;
   protocol: string;
 }
@@ -47,15 +51,17 @@ export interface CancelAppointmentParams {
 export interface FpshGateway {
   getUserProfile(cpf: string): Promise<unknown>;
   getUserAppointments(cpf: string): Promise<unknown>;
-  getAvailableCities(params: PermissionsParams): Promise<unknown>;
+  getAvailableCities(
+    params: AppointmentType
+  ): Promise<GetAvailableCitiesApiResponse>;
   getAvailableLocations(
-    params: { id_cidade: string } & PermissionsParams
+    params: { id_cidade: string } & AppointmentType
   ): Promise<unknown>;
   getAllBlocks(
-    params: { id_local: string } & PermissionsParams
+    params: { id_local: string } & AppointmentType
   ): Promise<unknown>;
   getBlocksByDate(
-    params: { dateSelected: string; id_local: string } & PermissionsParams
+    params: { dateSelected: string; id_local: string } & AppointmentType
   ): Promise<unknown>;
   makeAnAppointment(body: MakeAppointmentBody): Promise<unknown>;
   makeCampaignAppointment(body: MakeCampaignAppointmentBody): Promise<unknown>;

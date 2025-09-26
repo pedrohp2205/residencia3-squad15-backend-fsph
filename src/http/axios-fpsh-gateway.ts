@@ -5,24 +5,26 @@ import {
   MakeCampaignAppointmentBody,
   EditAppointmentBody,
   CancelAppointmentParams,
+  AppointmentType,
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
+import { GetAvailableCitiesApiResponse } from "@/@types/appointments/appointmentsFpsh";
 
 export class AxiosFpshGateway implements FpshGateway {
-  private normalizePermissions(p: PermissionsParams): PermissionsParams {
-    if (p.perm_individual === "1") {
+  private normalizePermissions(p: AppointmentType): PermissionsParams {
+    if (p === "D") {
       return { perm_individual: "1", perm_medula: "0", perm_campanha: "0" };
     }
-    if (p.perm_medula === "1") {
+    if (p === "M") {
       return { perm_individual: "0", perm_medula: "1", perm_campanha: "0" };
     }
-    if (p.perm_campanha === "1") {
+    if (p === "C") {
       return { perm_individual: "0", perm_medula: "0", perm_campanha: "1" };
     }
     return { perm_individual: "0", perm_medula: "0", perm_campanha: "0" };
   }
 
-  private permTuple(p: PermissionsParams): [string, string, string] {
+  private permTuple(p: AppointmentType): [string, string, string] {
     const n = this.normalizePermissions(p);
     return [n.perm_individual, n.perm_medula, n.perm_campanha];
   }
@@ -39,7 +41,9 @@ export class AxiosFpshGateway implements FpshGateway {
     return data;
   }
 
-  async getAvailableCities(params: PermissionsParams): Promise<unknown> {
+  async getAvailableCities(
+    params: AppointmentType
+  ): Promise<GetAvailableCitiesApiResponse> {
     const [pi, pm, pc] = this.permTuple(params);
     const { data } = await fpshApi.get(
       `/apiagendamento/cidades/${pi}/${pm}/${pc}`
@@ -48,7 +52,7 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getAvailableLocations(
-    params: { id_cidade: string } & PermissionsParams
+    params: { id_cidade: string } & AppointmentType
   ): Promise<unknown> {
     const [pi, pm, pc] = this.permTuple(params);
     const { id_cidade } = params;
@@ -59,7 +63,7 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getAllBlocks(
-    params: { id_local: string } & PermissionsParams
+    params: { id_local: string } & AppointmentType
   ): Promise<unknown> {
     const [pi, pm, pc] = this.permTuple(params);
     const { id_local } = params;
@@ -70,7 +74,7 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getBlocksByDate(
-    params: { dateSelected: string; id_local: string } & PermissionsParams
+    params: { dateSelected: string; id_local: string } & AppointmentType
   ): Promise<unknown> {
     const [pi, pm, pc] = this.permTuple(params);
     const { dateSelected, id_local } = params;

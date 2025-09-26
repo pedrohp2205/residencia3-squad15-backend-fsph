@@ -7,6 +7,7 @@ import { usersRoutes } from "./http/controllers/users/routes";
 import { authRoutes } from "./http/controllers/auth/routes";
 import fastifyMultipart from "@fastify/multipart";
 import { postsRoutes } from "./http/controllers/posts/routes";
+import { appointmentsRoutes } from "./http/controllers/appointments/routes";
 
 export const app = fastify();
 const prefix = { prefix: "/api/v1" };
@@ -37,6 +38,7 @@ app.register(fastifyMultipart, {
 app.register(usersRoutes, prefix);
 app.register(authRoutes, prefix);
 app.register(postsRoutes, prefix);
+app.register(appointmentsRoutes, prefix);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
