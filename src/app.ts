@@ -7,7 +7,7 @@ import { usersRoutes } from "./http/controllers/users/routes";
 import { authRoutes } from "./http/controllers/auth/routes";
 import fastifyMultipart from "@fastify/multipart";
 import { postsRoutes } from "./http/controllers/posts/routes";
-import { appointmentsRoutes } from "./http/controllers/appointments/routes";
+import { appointmentsRoutes } from "./http/controllers/donation/routes";
 
 export const app = fastify();
 const prefix = { prefix: "/api/v1" };

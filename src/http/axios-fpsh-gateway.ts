@@ -8,7 +8,7 @@ import {
   AppointmentType,
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
-import { GetAvailableCitiesApiResponse } from "@/@types/appointments/appointmentsFpsh";
+import { GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
 
 export class AxiosFpshGateway implements FpshGateway {
   private normalizePermissions(p: AppointmentType): PermissionsParams {

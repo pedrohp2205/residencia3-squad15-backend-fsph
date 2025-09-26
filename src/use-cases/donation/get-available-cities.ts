@@ -1,4 +1,4 @@
-import { City } from "@/@types/appointments/appointmentsFpsh";
+import { City } from "@/types/externalAPIs/fpsh";
 import { AppointmentType, FpshGateway } from "@/ports/fpsh-gateway";
 
 interface GetAvailableCitiesUseCaseRequest {

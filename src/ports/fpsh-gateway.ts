@@ -1,4 +1,4 @@
-import { GetAvailableCitiesApiResponse } from "@/@types/appointments/appointmentsFpsh";
+import { GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
 
 export interface PermissionsParams {
   perm_individual: string;
