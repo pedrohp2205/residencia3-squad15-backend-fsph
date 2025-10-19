@@ -6,10 +6,10 @@ import {
   EditAppointmentBody,
   CancelAppointmentParams,
   AppointmentType,
+  GetAvailableLocationsParams,
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
-import { GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
-import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error";
+import { DonationPlace, GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
 
 export class AxiosFpshGateway implements FpshGateway {
   private normalizePermissions(p: AppointmentType): PermissionsParams {
@@ -68,14 +68,14 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getAvailableLocations(
-    params: { id_cidade: string } & AppointmentType
-  ): Promise<unknown> {
-    const [pi, pm, pc] = this.permTuple(params);
+    params: GetAvailableLocationsParams
+  ): Promise<DonationPlace[]> {
+    const [pi, pm, pc] = this.permTuple(params.tipo_atendimento);
     const { id_cidade } = params;
     const { data } = await fpshApi.get(
       `/apiagendamento/local/${id_cidade}/${pi}/${pm}/${pc}`
     );
-    return data;
+    return data.data;
   }
 
   async getAllBlocks(

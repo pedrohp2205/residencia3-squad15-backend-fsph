@@ -1,4 +1,4 @@
-import { GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
 
 export interface PermissionsParams {
   perm_individual: string;
@@ -36,6 +36,14 @@ export interface MakeCampaignAppointmentBody {
   responsibleGender: Gender;
 }
 
+
+
+export interface GetAvailableLocationsParams {
+  id_cidade: bigint
+  tipo_atendimento: AppointmentType
+}
+
+
 export interface EditAppointmentBody {
   donorBirthDate?: string;
   donorCpf: string;
@@ -54,9 +62,7 @@ export interface FpshGateway {
   getAvailableCities(
     params: AppointmentType
   ): Promise<GetAvailableCitiesApiResponse>;
-  getAvailableLocations(
-    params: { id_cidade: string } & AppointmentType
-  ): Promise<unknown>;
+  getAvailableLocations(params: GetAvailableLocationsParams): Promise<DonationPlace[]>;
   getAllBlocks(
     params: { id_local: string } & AppointmentType
   ): Promise<unknown>;

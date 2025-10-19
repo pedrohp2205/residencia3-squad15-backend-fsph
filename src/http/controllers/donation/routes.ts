@@ -3,6 +3,7 @@ import { GetAvailableCities } from "./get-available-cities";
 import { verifyJwt } from "@/http/middlewares/verify-jwt";
 import { GetDonorAppointments } from "./get-donor-appointments";
 import { GetDonorProfile } from "./get-donor-profile";
+import { GetAvailableDonationPlaces } from "./get-available-donation-places";
 
 export async function appointmentsRoutes(app: FastifyInstance) {
   app.get(
@@ -21,5 +22,11 @@ export async function appointmentsRoutes(app: FastifyInstance) {
     "/donation/profile",
     { onRequest: [verifyJwt] },
     GetDonorProfile
+  );
+
+  app.get(
+    "/donation/appointments/places",
+    { onRequest: [verifyJwt] },
+    GetAvailableDonationPlaces
   );
 }

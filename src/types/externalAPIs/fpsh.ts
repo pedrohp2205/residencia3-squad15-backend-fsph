@@ -10,3 +10,15 @@ export interface City {
   nome: string;
   estado: string;
 }
+
+
+export interface DonationPlace {
+  id: number
+  local: string
+  id_cidade: number
+  endereco: string
+}
+
+export interface GetAvailableDonationPlacesResponse {
+  places: DonationPlace[]
+}
