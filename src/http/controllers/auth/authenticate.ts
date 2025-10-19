@@ -30,15 +30,10 @@ export async function authenticate(
     );
 
     return reply
-      .setCookie("refreshToken", refreshToken, {
-        path: "/",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        secure: process.env.NODE_ENV === "production",
-        httpOnly: true,
-      })
       .status(200)
       .send({
         token,
+        refreshToken
       });
   } catch (err) {
     if (err instanceof InvalidCredentialsError) {

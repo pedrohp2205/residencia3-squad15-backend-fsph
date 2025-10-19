@@ -51,11 +51,7 @@ export class RegisterUseCase {
       name,
       email,
       passwordHash: password_hash,
-      profile: {
-        create: {
-          cpf: normalizedCpf,
-        },
-      },
+      cpf: normalizedCpf,
     });
 
     return {

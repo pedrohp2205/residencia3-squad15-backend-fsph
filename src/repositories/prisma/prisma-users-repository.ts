@@ -1,10 +1,7 @@
 import { prisma } from "../../infra/prisma";
-import { Prisma } from "@prisma/client";
-
+import { Prisma, User } from "@prisma/client";
 import {
-  CreateUserWithCpfInput,
-  UsersRepository,
-  UserWithProfile,
+  UsersRepository, 
 } from "../users-repository";
 
 export class PrismaUsersRepository implements UsersRepository {
@@ -29,17 +26,13 @@ export class PrismaUsersRepository implements UsersRepository {
     return user;
   }
 
-  async create(data: CreateUserWithCpfInput): Promise<UserWithProfile> {
+  async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
     const user = await prisma.user.create({
       data: {
         name: data.name,
         email: data.email,
         passwordHash: data.passwordHash,
-        profile: {
-          create: {
-            cpf: data.profile.create.cpf,
-          },
-        },
+        cpf: data.cpf,
       },
       include: { profile: true },
     });
@@ -48,7 +41,7 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async cpfExists(cpf: string): Promise<boolean> {
-    const user = await prisma.profile.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         cpf,
       },

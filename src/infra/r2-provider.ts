@@ -1,4 +1,3 @@
-// src/infra/storage/r2.provider.ts
 import { StorageProvider, Upload } from "@/storage/storage-provider";
 import {
   DeleteObjectCommand,

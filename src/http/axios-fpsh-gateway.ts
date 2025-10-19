@@ -9,6 +9,7 @@ import {
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
 import { GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
+import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error";
 
 export class AxiosFpshGateway implements FpshGateway {
   private normalizePermissions(p: AppointmentType): PermissionsParams {
@@ -30,15 +31,30 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getDonorProfile(cpf: string): Promise<unknown> {
+
+    try {
+
     const { data } = await fpshApi.get(`/apiagendamento/doador/getinfo/${cpf}`);
+
     return data;
+    }catch (error) {
+      return []
+    }
   }
 
   async getDonorAppointments(cpf: string): Promise<unknown> {
-    const { data } = await fpshApi.get(
-      `/apiagendamento/agendamento/agendamentos/${cpf}`
-    );
-    return data;
+
+    try {
+      const response = await fpshApi.get(
+        `/apiagendamento/doador/agendamentos/${cpf}`
+      );
+
+      return response
+
+    } catch (error) {
+      return []
+    }
+
   }
 
   async getAvailableCities(
