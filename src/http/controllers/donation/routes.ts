@@ -4,6 +4,7 @@ import { verifyJwt } from "@/http/middlewares/verify-jwt";
 import { GetDonorAppointments } from "./get-donor-appointments";
 import { GetDonorProfile } from "./get-donor-profile";
 import { GetAvailableDonationPlaces } from "./get-available-donation-places";
+import { GetAvailableDonationTimeBlocks } from "./get-available-donation-time-blocks";
 
 export async function appointmentsRoutes(app: FastifyInstance) {
   app.get(
@@ -28,5 +29,11 @@ export async function appointmentsRoutes(app: FastifyInstance) {
     "/donation/appointments/places",
     { onRequest: [verifyJwt] },
     GetAvailableDonationPlaces
+  );
+
+  app.get(
+    "/donation/appointments/time-blocks",
+    { onRequest: [verifyJwt] },
+    GetAvailableDonationTimeBlocks
   );
 }

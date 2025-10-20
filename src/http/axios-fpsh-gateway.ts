@@ -7,9 +7,11 @@ import {
   CancelAppointmentParams,
   AppointmentType,
   GetAvailableLocationsParams,
+  GetAllBlocksParams,
+  GetBlocksByDateParams,
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
-import { DonationPlace, GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse } from "@/types/externalAPIs/fpsh";
 
 export class AxiosFpshGateway implements FpshGateway {
   private normalizePermissions(p: AppointmentType): PermissionsParams {
@@ -79,25 +81,25 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async getAllBlocks(
-    params: { id_local: string } & AppointmentType
-  ): Promise<unknown> {
-    const [pi, pm, pc] = this.permTuple(params);
+    params: GetAllBlocksParams
+  ): Promise<GetAllBlocksResponse> {
+    const [pi, pm, pc] = this.permTuple(params.tipo_atendimento);
     const { id_local } = params;
     const { data } = await fpshApi.get(
       `/apiagendamento/blocoagendamento/listarAllDate/${id_local}/${pi}/${pm}/${pc}`
     );
-    return data;
+    return data.data;
   }
 
   async getBlocksByDate(
-    params: { dateSelected: string; id_local: string } & AppointmentType
-  ): Promise<unknown> {
-    const [pi, pm, pc] = this.permTuple(params);
+    params: GetBlocksByDateParams
+  ): Promise<GetBlocksByDateResponse> {
+    const [pi, pm, pc] = this.permTuple(params.tipo_atendimento);
     const { dateSelected, id_local } = params;
     const { data } = await fpshApi.get(
       `/apiagendamento/blocoagendamento/listarByDate/${dateSelected}/${id_local}/${pi}/${pm}/${pc}`
     );
-    return data;
+    return data.data;
   }
 
   async makeAnAppointment(body: MakeAppointmentBody): Promise<unknown> {

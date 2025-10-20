@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { makeGetAvailableCitiesUseCase } from "@/use-cases/factories/make-get-available-cities-use-case";
 import { makeGetAvailableDonationPlacesUseCase } from "@/use-cases/factories/make-get-available-donation-places-use-case";
 
 export async function GetAvailableDonationPlaces(

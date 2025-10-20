@@ -1,4 +1,4 @@
-import { DonationPlace, GetAvailableCitiesApiResponse } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse } from "@/types/externalAPIs/fpsh";
 
 export interface PermissionsParams {
   perm_individual: string;
@@ -11,6 +11,15 @@ export type AppointmentType = "D" | "M" | "C"; // D: Doação, M: Medula, C: Cam
 export type Gender = "M" | "F" | "O";
 
 type AppointmentTypeWithoutCampaign = Omit<AppointmentType, "C">;
+
+
+export interface GetBlocksByDateParams {
+  id_local: bigint;
+  tipo_atendimento: AppointmentType;
+  dateSelected: string;
+}
+
+export type GetAllBlocksParams = Omit<GetBlocksByDateParams, "dateSelected">;
 
 export interface MakeAppointmentBody {
   donorName: string;
@@ -64,11 +73,11 @@ export interface FpshGateway {
   ): Promise<GetAvailableCitiesApiResponse>;
   getAvailableLocations(params: GetAvailableLocationsParams): Promise<DonationPlace[]>;
   getAllBlocks(
-    params: { id_local: string } & AppointmentType
-  ): Promise<unknown>;
+    params: GetAllBlocksParams
+  ): Promise<GetAllBlocksResponse>;
   getBlocksByDate(
-    params: { dateSelected: string; id_local: string } & AppointmentType
-  ): Promise<unknown>;
+    params: GetBlocksByDateParams
+  ): Promise<GetBlocksByDateResponse>;
   makeAnAppointment(body: MakeAppointmentBody): Promise<unknown>;
   makeCampaignAppointment(body: MakeCampaignAppointmentBody): Promise<unknown>;
   editAppointment(body: EditAppointmentBody): Promise<unknown>;

@@ -1,10 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { z } from "zod";
-import { makeGetAvailableCitiesUseCase } from "@/use-cases/factories/make-get-available-cities-use-case";
-import { makeGetDonorProfileUseCase } from "@/use-cases/factories/make-get-donor-profile-use-case";
 import { makeGetDonorAppointmentsUseCase } from "@/use-cases/factories/make-get-donor-appointments-use-case";
-import { app } from "@/app";
-import { UserNotFoundError } from "@/use-cases/errors/user-not-found-error";
+
 
 export async function GetDonorAppointments(
   request: FastifyRequest,
