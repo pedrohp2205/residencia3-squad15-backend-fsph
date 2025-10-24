@@ -33,20 +33,35 @@ model User {
   updatedAt    DateTime @updatedAt
   cpf          String   @unique
 
-  profile  Profile?
-  posts    Post[]
-  likes    Like[]
-  comments Comment[]
-  accounts OAuthAccount[]
+  profile      Profile?
+  posts        Post[]
+  likes        Like[]
+  comments     Comment[]
+  accounts     OAuthAccount[]
+  PreScreening PreScreening[]
 }
 
 model Profile {
   id        String     @id @default(uuid())
   userId    String     @unique
   phone     String?
+  birthDate DateTime?
   gender    Gender?
   bloodType BloodType?
   completed Boolean    @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PreScreening {
+  id                            String  @id @default(uuid())
+  userId                        String
+  firstTimeDonating             Boolean
+  weightMoreThanFiftyKilograms  Boolean
+  wasTatooedInANonVerifiedPlace Boolean
+
+  createdAt DateTime @default(now())
+  gender    Gender
 
   user User @relation(fields: [userId], references: [id])
 }

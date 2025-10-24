@@ -11,7 +11,8 @@ import {
   GetBlocksByDateParams,
 } from "@/ports/fpsh-gateway";
 import { fpshApi } from "@/infra/axios-fsph";
-import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAvailableCitiesApiResponse, TimeBlock, TimeBlockDate } from "@/types/externalAPIs/fpsh";
+import dayjs from "dayjs";
 
 export class AxiosFpshGateway implements FpshGateway {
   private normalizePermissions(p: AppointmentType): PermissionsParams {
@@ -32,6 +33,13 @@ export class AxiosFpshGateway implements FpshGateway {
     return [n.perm_individual, n.perm_medula, n.perm_campanha];
   }
 
+  private toYMD(input: string | Date) {
+    const d = dayjs(input);
+    if (!d.isValid()) throw new Error("Data de nascimento inválida");
+    return d.format("YYYY-MM-DD"); // tente assim primeiro
+    // Se ainda der 400, troque para: return d.format("DD/MM/YYYY");
+  }
+
   async getDonorProfile(cpf: string): Promise<unknown> {
 
     try {
@@ -47,11 +55,11 @@ export class AxiosFpshGateway implements FpshGateway {
   async getDonorAppointments(cpf: string): Promise<unknown> {
 
     try {
-      const response = await fpshApi.get(
+      const { data } = await fpshApi.get(
         `/apiagendamento/doador/agendamentos/${cpf}`
       );
 
-      return response
+      return data.data
 
     } catch (error) {
       return []
@@ -82,7 +90,7 @@ export class AxiosFpshGateway implements FpshGateway {
 
   async getAllBlocks(
     params: GetAllBlocksParams
-  ): Promise<GetAllBlocksResponse> {
+  ): Promise<TimeBlock[]> {
     const [pi, pm, pc] = this.permTuple(params.tipo_atendimento);
     const { id_local } = params;
     const { data } = await fpshApi.get(
@@ -93,7 +101,7 @@ export class AxiosFpshGateway implements FpshGateway {
 
   async getBlocksByDate(
     params: GetBlocksByDateParams
-  ): Promise<GetBlocksByDateResponse> {
+  ): Promise<TimeBlockDate[]> {
     const [pi, pm, pc] = this.permTuple(params.tipo_atendimento);
     const { dateSelected, id_local } = params;
     const { data } = await fpshApi.get(
@@ -103,12 +111,17 @@ export class AxiosFpshGateway implements FpshGateway {
   }
 
   async makeAnAppointment(body: MakeAppointmentBody): Promise<unknown> {
+
     const formData = new FormData();
-    Object.entries(body).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value as string | Blob);
-      }
-    });
+    formData.append("doador_nome", String(body.donorName));
+    formData.append("doador_email", String(body.donorEmail));
+    formData.append("doador_cpf", String(body.donorCpf));
+    formData.append("doador_telefone", String(body.donorPhone));
+    formData.append("doador_sexo", String(body.donorGender)); 
+    formData.append("tipo", String(body.type));
+    formData.append("id_bloco_doacao", String(body.donationBlockId));
+    formData.append("doador_dt_nascimento", this.toYMD(body.donorBirthDate));
+
 
     const { data } = await fpshApi.post(
       "/apiagendamento/agendamento/marcar",

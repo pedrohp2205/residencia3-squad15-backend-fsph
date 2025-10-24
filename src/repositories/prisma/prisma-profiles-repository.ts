@@ -3,11 +3,11 @@ import type { Profile, Gender, BloodType } from '@prisma/client'
 import type { ProfilesRepository } from '../profiles-repository'
 
 export class PrismaProfilesRepository implements ProfilesRepository {
-  async findByCpf(cpf: string): Promise<Profile | null> {
-    return prisma.profile.findFirst({
-      where: { cpf },
-    })
-  }
+  // async findByCpf(cpf: string): Promise<Profile | null> {
+  //   return prisma.profile.findFirst({
+  //     where: { cpf },
+  //   })
+  // }
 
   async findByUserId(userId: string): Promise<Profile | null> {
     return prisma.profile.findUnique({
@@ -18,7 +18,8 @@ export class PrismaProfilesRepository implements ProfilesRepository {
   async upsertByUserId(
     userId: string,
     data: {
-      cpf: string
+      // cpf: string
+      birthDate: Date
       phone: string
       gender: Gender
       bloodType: BloodType
@@ -29,16 +30,18 @@ export class PrismaProfilesRepository implements ProfilesRepository {
       where: { userId },
       create: {
         userId,
-        cpf: data.cpf,
+        // cpf: data.cpf,
+        birthDate: data.birthDate,
         phone: data.phone,
         gender: data.gender,
         bloodType: data.bloodType,
         completed: data.completed,
       },
       update: {
-        cpf: data.cpf,
+        // cpf: data.cpf,
         phone: data.phone,
         gender: data.gender,
+        birthDate: data.birthDate,
         bloodType: data.bloodType,
         completed: data.completed,
       },

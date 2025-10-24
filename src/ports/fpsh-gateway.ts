@@ -1,4 +1,4 @@
-import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse, TimeBlock, TimeBlockDate } from "@/types/externalAPIs/fpsh";
 
 export interface PermissionsParams {
   perm_individual: string;
@@ -74,10 +74,10 @@ export interface FpshGateway {
   getAvailableLocations(params: GetAvailableLocationsParams): Promise<DonationPlace[]>;
   getAllBlocks(
     params: GetAllBlocksParams
-  ): Promise<GetAllBlocksResponse>;
+  ): Promise<TimeBlock[]>;
   getBlocksByDate(
     params: GetBlocksByDateParams
-  ): Promise<GetBlocksByDateResponse>;
+  ): Promise<TimeBlockDate[]>;
   makeAnAppointment(body: MakeAppointmentBody): Promise<unknown>;
   makeCampaignAppointment(body: MakeCampaignAppointmentBody): Promise<unknown>;
   editAppointment(body: EditAppointmentBody): Promise<unknown>;

@@ -40,15 +40,8 @@ export interface TimeBlock {
   endereco: string
 }
 
-export interface GetBlocksByDateResponse {
-  timeBlocks: TimeBlock[]
-}
-
 
 export interface TimeBlockDate {
   data: string 
 }
 
-export interface GetAllBlocksResponse {
-  timeBlocks: TimeBlockDate[]
-}

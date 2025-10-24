@@ -1,13 +1,13 @@
 import { ProfilesRepository } from "@/repositories/profiles-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { UserNotFoundError } from "../errors/user-not-found-error";
+import { ProfileAlreadyCompletedError } from "../errors/profile-already-completed-error";
 import { Profile } from "@prisma/client";
-import { BadRequestError } from "../errors/bad-request-error";
 
 interface CompleteProfileUseCaseRequest {
   userId: string;
-  cpf: string;
   phone: string;
+  dateOfBirth: Date;
   gender: "M" | "F" | "OTHER";
   bloodType:
     | "A_POS"
@@ -32,31 +32,28 @@ export class CompleteProfileUseCase {
 
   async execute({
     userId,
-    cpf,
     phone,
     gender,
+    dateOfBirth,
     bloodType,
   }: CompleteProfileUseCaseRequest): Promise<CompleteProfileUseCaseResponse> {
     const user = await this.usersRepository.findById(userId);
-    if (!user) {
-      throw new UserNotFoundError();
-    }
+    if (!user) throw new UserNotFoundError();
 
-    const existing = await this.profilesRepository.findByCpf(cpf);
-    if (existing && existing.userId !== userId) {
-      throw new BadRequestError();
+    const existing = await this.profilesRepository.findByUserId(userId);
+
+    if (existing && existing.completed) {
+      throw new ProfileAlreadyCompletedError();
     }
 
     const profile = await this.profilesRepository.upsertByUserId(userId, {
-      cpf,
       phone,
       gender,
       bloodType,
+      birthDate: dateOfBirth,
       completed: true,
     });
 
-    return {
-      profile,
-    };
+    return { profile };
   }
 }

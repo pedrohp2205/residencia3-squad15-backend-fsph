@@ -1,11 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeCompleteProfileUseCase } from "../../../use-cases/factories/make-complete-profile-use-case";
-import {
-  cpfIsValid,
-  normalizeCpf,
-  normalizePhone,
-} from "../../../utils/br-validators";
 import type { BloodType } from "@prisma/client";
 
 export async function completeProfile(
@@ -13,16 +8,7 @@ export async function completeProfile(
   reply: FastifyReply
 ) {
   const sexes = ["M", "F", "OTHER"] as const;
-  const bloodTypes = [
-    "A+",
-    "A-",
-    "B+",
-    "B-",
-    "AB+",
-    "AB-",
-    "O+",
-    "O-",
-  ] as const;
+  const bloodTypes = ["A+","A-","B+","B-","AB+","AB-","O+","O-"] as const;
 
   const bloodTypeEnumMap: Record<(typeof bloodTypes)[number], BloodType> = {
     "A+": "A_POS",
@@ -35,52 +21,38 @@ export async function completeProfile(
     "O-": "O_NEG",
   };
 
+  // Agora todos os campos são obrigatórios
   const bodySchema = z.object({
-    cpf: z
-      .string()
-      .min(11)
-      .max(14)
-      .transform((v) => normalizeCpf(v))
-      .refine((v) => cpfIsValid(v), "CPF inválido"),
-    phone: z
-      .string()
-      .min(8)
-      .max(20)
-      .transform((v) => normalizePhone(v)),
+    phone: z.string().min(8).max(20),
     sex: z.enum(sexes),
     bloodType: z.enum(bloodTypes),
-    dateOfBirth: z.string().optional(),
-    address: z
-      .object({
-        street: z.string(),
-        number: z.string(),
-        neighborhood: z.string(),
-        city: z.string(),
-        state: z.string().length(2),
-        zipcode: z.string(),
-        complement: z.string().optional(),
-      })
-      .optional(),
+    dateOfBirth: z.coerce.date(),
   });
 
-  const { cpf, phone, sex, bloodType } = bodySchema.parse(request.body);
+  const { phone, sex, bloodType, dateOfBirth } = bodySchema.parse(request.body);
 
   const useCase = makeCompleteProfileUseCase();
 
-  const result = await useCase.execute({
+  const payload: {
+    userId: string;
+    phone: string;
+    gender: typeof sexes[number];
+    dateOfBirth: Date;
+    bloodType: BloodType;
+  } = {
     userId: request.user.sub,
-    cpf,
     phone,
     gender: sex,
+    dateOfBirth,
     bloodType: bloodTypeEnumMap[bloodType],
-  });
+  };
 
+  const result = await useCase.execute(payload);
   const { profile } = result;
 
   return reply.status(200).send({
     id: profile.id,
     userId: profile.userId,
-    cpf: profile.cpf,
     phone: profile.phone,
     sex: profile.gender,
     bloodType: profile.bloodType,
