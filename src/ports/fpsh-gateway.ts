@@ -1,4 +1,4 @@
-import { DonationPlace, GetAllBlocksResponse, GetAvailableCitiesApiResponse, GetBlocksByDateResponse, TimeBlock, TimeBlockDate } from "@/types/externalAPIs/fpsh";
+import { DonationPlace, GetAvailableCitiesApiResponse, TimeBlock, TimeBlockDate } from "@/types/externalAPIs/fpsh";
 
 export interface PermissionsParams {
   perm_individual: string;

@@ -134,15 +134,28 @@ export class AxiosFpshGateway implements FpshGateway {
     return data;
   }
 
-  async makeCampaignAppointment(
-    body: MakeCampaignAppointmentBody
-  ): Promise<unknown> {
-    const { data } = await fpshApi.post(
-      "/apiagendamento/campanha/marcar",
-      body
-    );
+  async makeCampaignAppointment(body: MakeCampaignAppointmentBody): Promise<unknown> {
+    const turno = body.shift === "morning" ? "manha" : "tarde";
+
+    const form = new FormData();
+    form.append("nome_responsavel", body.responsibleName);
+    form.append("dt_nascimento_responsavel", this.toYMD(body.responsibleBirthDate));
+    form.append("email_responsavel", body.responsibleEmail);
+    form.append("cpf_responsavel", body.responsibleCpf);
+    form.append("telefone_responsavel", body.responsiblePhone);
+    form.append("sexo_responsavel", body.responsibleGender);
+    form.append("turno", turno);
+    form.append("qt_doadores", String(body.donorsQuantity));
+    form.append("data", this.toYMD(body.date));
+    form.append("min_hora", "08:00");
+    form.append("max_hora", "12:00"); // manhã, se for essa a regra deles
+
+
+    const { data } = await fpshApi.post("/apiagendamento/campanha/marcar", form);
     return data;
   }
+
+
 
   async editAppointment(body: EditAppointmentBody): Promise<unknown> {
     const formData = new FormData();

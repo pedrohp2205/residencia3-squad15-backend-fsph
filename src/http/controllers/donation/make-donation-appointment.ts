@@ -1,4 +1,4 @@
-import { makeMakeDonationAppointmentUseCase } from "@/use-cases/factories/make-donation-appointment";
+import { makeMakeDonationAppointmentUseCase } from "@/use-cases/factories/make-donation-appointment-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 

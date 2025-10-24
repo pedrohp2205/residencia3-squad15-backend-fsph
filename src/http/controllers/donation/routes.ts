@@ -6,6 +6,7 @@ import { GetDonorProfile } from "./get-donor-profile";
 import { GetAvailableDonationPlaces } from "./get-available-donation-places";
 import { GetAvailableDonationTimeBlocks } from "./get-available-donation-time-blocks";
 import { MakeDonationAppointment } from "./make-donation-appointment";
+import { MakeCampaignDonationAppointment } from "./make-donation-campaign-appointment";
 
 export async function appointmentsRoutes(app: FastifyInstance) {
   app.get(
@@ -42,5 +43,11 @@ export async function appointmentsRoutes(app: FastifyInstance) {
     "/donation/appointments",
     { onRequest: [verifyJwt] },
     MakeDonationAppointment
+  );
+
+  app.post(
+    "/donation/appointments/campaign",
+    { onRequest: [verifyJwt] },
+    MakeCampaignDonationAppointment
   );
 }
