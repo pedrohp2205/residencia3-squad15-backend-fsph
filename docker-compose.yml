@@ -1,32 +1,18 @@
 version: "3.9"
 
 services:
-  # mysql:
-  #   image: mysql:latest
-  #   container_name: mysql_db
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: fsph-hemose
-  #     MYSQL_USER: hemose
-  #     MYSQL_PASSWORD: hemose
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   restart: unless-stopped
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres_db
+  mysql:
+    image: mysql:latest
+    container_name: mysql_db
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: fsph-hemose
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fsph-hemose
+      MYSQL_USER: hemose
+      MYSQL_PASSWORD: hemose
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - mysql_data:/var/lib/mysql
 
   redis:
     image: redis:latest
@@ -35,9 +21,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    restart: unless-stopped
 
 volumes:
   mysql_data:
-  postgres_data:
   redis_data:
