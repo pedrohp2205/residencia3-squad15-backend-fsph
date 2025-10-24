@@ -18,7 +18,7 @@ export async function postsRoutes(app: FastifyInstance) {
           "Cria um post com texto (até 280 caracteres) e exatamente 1 imagem (PNG ou JPEG). Envie via multipart/form-data.",
         body: {
           type: "object",
-          additionalProperties: true, // permitir campos internos do multipart
+          additionalProperties: false, // permitir campos internos do multipart
           required: ["content"],
           properties: {
             // lidos no handler via request.parts()
@@ -29,23 +29,23 @@ export async function postsRoutes(app: FastifyInstance) {
         response: {
           201: {
             type: "object",
-            additionalProperties: true, // o handler pode retornar { ok: true } ou um objeto do use-case
+            additionalProperties: false, // o handler pode retornar { ok: true } ou um objeto do use-case
           },
           400: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           404: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -76,13 +76,13 @@ export async function postsRoutes(app: FastifyInstance) {
           201: { type: "null", nullable: true },
           404: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -114,17 +114,17 @@ export async function postsRoutes(app: FastifyInstance) {
           200: {
             // o handler retorna diretamente 'posts' (geralmente um array)
             type: "array",
-            items: { type: "object", additionalProperties: true },
+            items: { type: "object", additionalProperties: false },
           },
           404: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -156,13 +156,13 @@ export async function postsRoutes(app: FastifyInstance) {
           201: { type: "null", nullable: true },
           404: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },

@@ -34,7 +34,7 @@ export async function authRoutes(app: FastifyInstance) {
           400: {
             description: "Credenciais inválidas",
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               message: { type: "string" },
             },
@@ -68,7 +68,7 @@ export async function authRoutes(app: FastifyInstance) {
           401: {
             description: "Refresh token inválido ou ausente",
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },

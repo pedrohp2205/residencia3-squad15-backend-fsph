@@ -33,14 +33,14 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             properties: {
               cities: {
                 type: "array",
-                items: { type: "object", additionalProperties: true },
+                items: { type: "object", additionalProperties: false },
               },
             },
             required: ["cities"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -50,7 +50,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -76,14 +76,14 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             properties: {
               appointments: {
                 type: "array",
-                items: { type: "object", additionalProperties: true },
+                items: { type: "object", additionalProperties: false },
               },
             },
             required: ["appointments"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -93,7 +93,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -117,13 +117,13 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             type: "object",
             additionalProperties: false,
             properties: {
-              profile: { type: "object", additionalProperties: true },
+              profile: { type: "object", additionalProperties: false },
             },
             required: ["profile"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -133,7 +133,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -169,14 +169,14 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             properties: {
               places: {
                 type: "array",
-                items: { type: "object", additionalProperties: true },
+                items: { type: "object", additionalProperties: false },
               },
             },
             required: ["places"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -186,7 +186,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -225,14 +225,14 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             properties: {
               timeBlocks: {
                 type: "array",
-                items: { type: "object", additionalProperties: true },
+                items: { type: "object", additionalProperties: false },
               },
             },
             required: ["timeBlocks"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -242,7 +242,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -287,7 +287,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -297,7 +297,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -333,22 +333,22 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             type: "object",
             additionalProperties: false,
             properties: {
-              appointment: { type: "object", additionalProperties: true },
+              appointment: { type: "object", additionalProperties: false },
             },
             required: ["appointment"],
           },
           400: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               message: { type: "string" },
-              issues: { type: "array", items: { type: "object", additionalProperties: true } },
+              issues: { type: "array", items: { type: "object", additionalProperties: false } },
             },
             required: ["message"],
           },
           401: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -358,13 +358,13 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           404: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: "string" } },
             required: ["message"],
           },

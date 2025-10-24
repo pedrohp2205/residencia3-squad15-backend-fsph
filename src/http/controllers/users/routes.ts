@@ -27,19 +27,19 @@ export async function usersRoutes(app: FastifyInstance) {
           201: { type: 'null' },
           400: {
             type: 'object',
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
           409: {
             type: 'object',
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
           500: {
             type: 'object',
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
@@ -91,7 +91,7 @@ export async function usersRoutes(app: FastifyInstance) {
           },
           401: {
             type: 'object',
-            additionalProperties: true,
+            additionalProperties: false,
             properties: {
               statusCode: { type: 'number' },
               error: { type: 'string' },
@@ -101,7 +101,7 @@ export async function usersRoutes(app: FastifyInstance) {
           },
           500: {
             type: 'object',
-            additionalProperties: true,
+            additionalProperties: false,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
