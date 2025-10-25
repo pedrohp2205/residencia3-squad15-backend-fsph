@@ -31,6 +31,12 @@ export async function authenticate(
 
     return reply
       .status(200)
+      .setCookie("refreshToken", refreshToken, {
+        path: "/",
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      })
       .send({
         token,
         refreshToken

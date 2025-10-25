@@ -26,12 +26,12 @@ enum BloodType {
 
 model User {
   id           String   @id @default(uuid())
-  name         String
+  name         String?
   email        String   @unique
-  passwordHash String
+  passwordHash String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  cpf          String   @unique
+  cpf          String?  @unique
 
   profile      Profile?
   posts        Post[]

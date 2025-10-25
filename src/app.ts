@@ -12,6 +12,7 @@ import { appointmentsRoutes } from "./http/controllers/donation/routes";
 
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
+import fastifyOauth2 from '@fastify/oauth2'
 
 export const app = fastify();
 const prefix = { prefix: "/api/v1" };
