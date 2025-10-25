@@ -81,5 +81,5 @@ export interface FpshGateway {
   makeAnAppointment(body: MakeAppointmentBody): Promise<unknown>;
   makeCampaignAppointment(body: MakeCampaignAppointmentBody): Promise<unknown>;
   editAppointment(body: EditAppointmentBody): Promise<unknown>;
-  cancelAppointment(params: CancelAppointmentParams): Promise<unknown>;
+  cancelAppointment(params: CancelAppointmentParams): Promise<boolean>;
 }

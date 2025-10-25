@@ -7,6 +7,7 @@ import { GetAvailableDonationPlaces } from "./get-available-donation-places";
 import { GetAvailableDonationTimeBlocks } from "./get-available-donation-time-blocks";
 import { MakeDonationAppointment } from "./make-donation-appointment";
 import { MakeCampaignDonationAppointment } from "./make-donation-campaign-appointment";
+import { cancelDonationAppointment } from "./cancel-donation-appointment";
 
 export async function appointmentsRoutes(app: FastifyInstance) {
   // GET /donation/appointments/cities
@@ -372,5 +373,47 @@ export async function appointmentsRoutes(app: FastifyInstance) {
       },
     },
     MakeCampaignDonationAppointment
+  );
+
+  app.post(
+    "/donation/appointments/cancel",
+    {
+      schema: {
+        tags: ["Appointments"],
+        summary: "Cancelar agendamento de doação",
+        description: "Cancela um agendamento de doação informando o protocolo.",
+        body: {
+          type: "object",
+          required: ["protocol"],
+          additionalProperties: false,
+          properties: {
+            protocol: { type: "string", minLength: 1 },
+          },
+        },
+        response: {
+          200: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              success: { type: "boolean" },
+            },
+            required: ["success"],
+          },
+          400: {
+            type: "object",
+            additionalProperties: false,
+            properties: { message: { type: "string" } },
+            required: ["message"],
+          },
+          500: {
+            type: "object",
+            additionalProperties: false,
+            properties: { message: { type: "string" } },
+            required: ["message"],
+          },
+        },
+      },
+    },
+    cancelDonationAppointment
   );
 }

@@ -176,11 +176,12 @@ export class AxiosFpshGateway implements FpshGateway {
     return data;
   }
 
-  async cancelAppointment(params: CancelAppointmentParams): Promise<unknown> {
-    const { protocol } = params;
-    const { data } = await fpshApi.delete(
-      `/apiagendamento/agendamento/desmarcar/${protocol}`
-    );
-    return data;
+  async cancelAppointment({ protocol }: { protocol: string }): Promise<boolean> {
+    try {
+      await fpshApi.delete(`/apiagendamento/agendamento/desmarcar/${protocol}`)
+      return true
+    } catch {
+      return false
+    }
   }
 }
