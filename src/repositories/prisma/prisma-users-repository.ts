@@ -52,8 +52,8 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
 
-  findByOAuth(provider: 'google', providerId: string) {
-    return prisma.user.findFirst({
+  async findByOAuth(provider: 'google', providerId: string) {
+    return await prisma.user.findFirst({
       where: { accounts: { some: { provider, providerId } } },
       include: { accounts: true },
     })
@@ -77,5 +77,12 @@ export class PrismaUsersRepository implements UsersRepository {
 
   async linkOAuthAccount(userId: string, provider: 'google', providerId: string) {
     return await prisma.oAuthAccount.create({ data: { provider, providerId, userId } })
+  }
+
+  async isUserLinkedToOAuthProvider(userId: string, provider: 'google') {
+    const account = await prisma.oAuthAccount.findFirst({
+      where: { userId, provider },
+    })
+    return account !== null
   }
 }

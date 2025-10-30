@@ -18,6 +18,8 @@ interface CompleteProfileUseCaseRequest {
     | "AB_NEG"
     | "O_POS"
     | "O_NEG";
+  name?: string;
+  cpf?: string;
 }
 
 interface CompleteProfileUseCaseResponse {
@@ -36,6 +38,8 @@ export class CompleteProfileUseCase {
     gender,
     dateOfBirth,
     bloodType,
+    name,
+    cpf,
   }: CompleteProfileUseCaseRequest): Promise<CompleteProfileUseCaseResponse> {
     const user = await this.usersRepository.findById(userId);
     if (!user) throw new UserNotFoundError();
@@ -45,6 +49,22 @@ export class CompleteProfileUseCase {
     if (existing && existing.completed) {
       throw new ProfileAlreadyCompletedError();
     }
+
+    const isUserLinkedToOAuth = await this.usersRepository.isUserLinkedToOAuthProvider(userId, 'google');
+    if ((name || cpf) && isUserLinkedToOAuth) {
+      const profile = await this.profilesRepository.upsertByUserId(userId, {
+        phone,
+        gender,
+        bloodType,
+        birthDate: dateOfBirth,
+        completed: true,
+        name,
+        cpf,
+      });
+
+      return { profile };
+    }
+
 
     const profile = await this.profilesRepository.upsertByUserId(userId, {
       phone,

@@ -9,16 +9,20 @@ export async function googleIdController(request: FastifyRequest, reply: Fastify
   const { idToken } = bodySchema.parse(request.body)
 
   const client = new OAuth2Client(process.env.GOOGLE_WEB_CLIENT_ID!)
+
   const ticket = await client.verifyIdToken({
     idToken,
     audience: process.env.GOOGLE_WEB_CLIENT_ID!,
   })
+
   const payload = ticket.getPayload()
+
   if (!payload?.email || !payload.email_verified) {
     return reply.status(403).send({ message: 'Email do Google não verificado' })
   }
 
   const useCase = makeAuthenticateWithGoogleUseCase()
+  
   const { user } = await useCase.execute({
     googleSub: payload.sub!,
     email: payload.email!,

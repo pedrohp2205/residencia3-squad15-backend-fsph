@@ -18,19 +18,31 @@ export class PrismaProfilesRepository implements ProfilesRepository {
   async upsertByUserId(
     userId: string,
     data: {
-      // cpf: string
       birthDate: Date
       phone: string
       gender: Gender
       bloodType: BloodType
       completed: boolean
+      name?: string
+      cpf?: string
     }
   ): Promise<Profile> {
+
+    if (data.name || data.cpf) {
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: data.name,
+          cpf: data.cpf,
+        },
+      })
+    }
+    
+
     return prisma.profile.upsert({
       where: { userId },
       create: {
         userId,
-        // cpf: data.cpf,
         birthDate: data.birthDate,
         phone: data.phone,
         gender: data.gender,
@@ -38,7 +50,6 @@ export class PrismaProfilesRepository implements ProfilesRepository {
         completed: data.completed,
       },
       update: {
-        // cpf: data.cpf,
         phone: data.phone,
         gender: data.gender,
         birthDate: data.birthDate,

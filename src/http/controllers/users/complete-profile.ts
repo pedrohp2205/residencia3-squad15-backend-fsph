@@ -21,15 +21,17 @@ export async function completeProfile(
     "O-": "O_NEG",
   };
 
-  // Agora todos os campos são obrigatórios
+  
   const bodySchema = z.object({
     phone: z.string().min(8).max(20),
     sex: z.enum(sexes),
     bloodType: z.enum(bloodTypes),
     dateOfBirth: z.coerce.date(),
+    name: z.string().min(2).max(100).optional(),
+    cpf: z.string().min(11).max(14).optional(),
   });
 
-  const { phone, sex, bloodType, dateOfBirth } = bodySchema.parse(request.body);
+  const { phone, sex, bloodType, dateOfBirth, name, cpf } = bodySchema.parse(request.body);
 
   const useCase = makeCompleteProfileUseCase();
 
@@ -39,12 +41,16 @@ export async function completeProfile(
     gender: typeof sexes[number];
     dateOfBirth: Date;
     bloodType: BloodType;
+    name?: string;
+    cpf?: string;
   } = {
     userId: request.user.sub,
     phone,
     gender: sex,
     dateOfBirth,
     bloodType: bloodTypeEnumMap[bloodType],
+    name,
+    cpf,
   };
 
   const result = await useCase.execute(payload);

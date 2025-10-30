@@ -12,6 +12,8 @@ export interface ProfilesRepository {
       gender: string
       bloodType: string
       completed: boolean
+      name?: string
+      cpf?: string
     },
   ): Promise<Profile>
 }

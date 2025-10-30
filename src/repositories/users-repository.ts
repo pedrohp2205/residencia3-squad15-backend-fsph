@@ -24,5 +24,6 @@ export interface UsersRepository {
   findByOAuth(provider: 'google', providerId: string): Promise<(User & { accounts: OAuthAccount[] }) | null>
   createUserWithOAuth(data: CreateOAuthUserInput): Promise<User & { accounts: OAuthAccount[] }>
   linkOAuthAccount(userId: string, provider: 'google', providerId: string): Promise<OAuthAccount>
+  isUserLinkedToOAuthProvider(userId: string, provider: 'google'): Promise<boolean>
 }
 
