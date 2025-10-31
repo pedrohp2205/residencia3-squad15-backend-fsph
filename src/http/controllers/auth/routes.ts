@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 
 import { authenticate } from "./authenticate";
 import { refresh } from "./refresh";
+import { googleIdController } from "./google-id";
 
 export async function authRoutes(app: FastifyInstance) {
   app.post(
@@ -54,7 +55,6 @@ export async function authRoutes(app: FastifyInstance) {
         summary: "Renovação de token JWT",
         description:
           "Gera um novo token JWT usando o refresh token armazenado em cookie.",
-        // Se quiser documentar cookies no OpenAPI, faça via 'headers' (string 'cookie') ou configure transform no @fastify/swagger.
         response: {
           200: {
             description: "Token renovado com sucesso",
@@ -80,5 +80,64 @@ export async function authRoutes(app: FastifyInstance) {
       },
     },
     refresh
+  );
+
+    app.post(
+    "/auth/google/id",
+    {
+      schema: {
+        tags: ["Auth"],
+        summary: "Autenticação com Google (ID Token)",
+        description:
+          "Recebe um ID Token do Google, valida e retorna tokens JWT. Também define o refreshToken em cookie (httpOnly, sameSite, secure).",
+        body: {
+          type: "object",
+          required: ["idToken"],
+          additionalProperties: false,
+          properties: {
+            idToken: { type: "string", minLength: 20 },
+          },
+        },
+        response: {
+          200: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              token: { type: "string" },
+              refreshToken: { type: "string" },
+            },
+            required: ["token", "refreshToken"],
+          },
+          403: {
+            description: "Email do Google não verificado",
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              message: { type: "string" },
+            },
+            required: ["message"],
+          },
+          400: {
+            description: "Erro de validação do corpo (Zod)",
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              message: { type: "string" },
+            },
+            required: ["message"],
+          },
+          500: {
+            description: "Erro interno",
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              message: { type: "string" },
+            },
+            required: ["message"],
+          },
+        },
+      },
+    },
+    googleIdController
   );
 }
