@@ -34,7 +34,16 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             properties: {
               cities: {
                 type: "array",
-                items: { type: "object", additionalProperties: false },
+                items: {
+                  type: "object",
+                  additionalProperties: false,
+                  properties: {
+                    id: { type: "number" },       // ou "integer" se preferir
+                    nome: { type: "string" },
+                    estado: { type: "string" },
+                  },
+                  required: ["id", "nome", "estado"],
+                },
               },
             },
             required: ["cities"],
