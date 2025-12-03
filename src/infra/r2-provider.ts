@@ -1,6 +1,7 @@
 import { StorageProvider, Upload } from "@/storage/storage-provider";
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -105,6 +106,19 @@ export class R2Provider implements StorageProvider {
     });
 
     return { uploadUrl, key };
+  }
+
+  async getPresignedUrlFromKey(key: string): Promise<string> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
+    });
+
+    const url = await getSignedUrl(this.client, command, {
+      expiresIn: 60 * 15, 
+    });
+
+    return url;
   }
 
   /**

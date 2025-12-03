@@ -1,9 +1,9 @@
 import {
   PostDTO,
   PostsRepository,
-  PostWithRelations,
 } from "@/repositories/posts-repository";
 import { PostNotFoundError } from "../errors/post-not-found-error";
+import { StorageProvider } from "@/storage/storage-provider";
 
 interface FetchPostsUseCaseRequest {
   currentUserId?: string;
@@ -12,7 +12,10 @@ interface FetchPostsUseCaseRequest {
 }
 
 export class FetchPostsUseCase {
-  constructor(private postsRepository: PostsRepository) {}
+  constructor(
+    private postsRepository: PostsRepository,
+    private storageProvider: StorageProvider
+  ) {}
 
   async execute({
     currentUserId,
@@ -25,8 +28,28 @@ export class FetchPostsUseCase {
       cursor,
     });
 
-    if (!posts) throw new PostNotFoundError();
+    // se o repo sempre retorna array, esse if nem dispara, mas deixei
+    if (!posts || posts.length === 0) {
+      throw new PostNotFoundError();
+    }
 
-    return posts;
+    const postsWithSignedUrl = await Promise.all(
+      posts.map(async (post) => {
+        if (!post.mediaUrl) {
+          return post;
+        }
+
+        const signedUrl = await this.storageProvider.getPresignedUrlFromKey(
+          post.mediaUrl
+        );
+
+        return {
+          ...post,
+          mediaUrl: signedUrl,
+        };
+      })
+    );
+
+    return postsWithSignedUrl;
   }
 }

@@ -1,3 +1,4 @@
+import { ProfileNotCompletedError } from "@/use-cases/errors/profile-not-completed-error";
 import { makeMakeDonationAppointmentUseCase } from "@/use-cases/factories/make-donation-appointment-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
@@ -36,7 +37,10 @@ export async function MakeDonationAppointment(
 
     return reply.status(201).send();
   } catch (err) {
-    console.log(err);
+    console.log(err)
+    if (err instanceof ProfileNotCompletedError) {
+      return reply.status(400).send({ message: "Seu perfil deve estar completo para continuar."});
+    }
     return reply.status(500).send({ message: "Internal server error." });
   }
 }

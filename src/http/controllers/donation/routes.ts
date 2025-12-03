@@ -22,7 +22,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         querystring: {
           type: "object",
           required: ["appointmentType"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             appointmentType: { type: "string", enum: ["D", "M", "C"] },
           },
@@ -30,13 +30,13 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               cities: {
                 type: "array",
                 items: {
                   type: "object",
-                  additionalProperties: false,
+                  additionalProperties: true,
                   properties: {
                     id: { type: "number" },       // ou "integer" se preferir
                     nome: { type: "string" },
@@ -50,7 +50,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -60,7 +60,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -82,18 +82,18 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               appointments: {
                 type: "array",
-                items: { type: "object", additionalProperties: false },
+                items: { type: "object", additionalProperties: true },
               },
             },
             required: ["appointments"],
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -103,7 +103,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -125,15 +125,15 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
-              profile: { type: "object", additionalProperties: false },
+              profile: { type: "object", additionalProperties: true },
             },
             required: ["profile"],
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -143,7 +143,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -165,7 +165,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         querystring: {
           type: "object",
           required: ["appointmentType", "cityId"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             appointmentType: { type: "string", enum: ["D", "M", "C"] },
             // cityId chega como string e é convertido para BigInt na lógica
@@ -175,18 +175,18 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               places: {
                 type: "array",
-                items: { type: "object", additionalProperties: false },
+                items: { type: "object", additionalProperties: true },
               },
             },
             required: ["places"],
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -196,7 +196,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -219,7 +219,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         querystring: {
           type: "object",
           required: ["appointmentType", "placeId"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             appointmentType: { type: "string", enum: ["D", "M", "C"] },
             // selectedDate é opcional (string), transformada em Date na lógica
@@ -231,18 +231,18 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               timeBlocks: {
                 type: "array",
-                items: { type: "object", additionalProperties: false },
+                items: { type: "object", additionalProperties: true },
               },
             },
             required: ["timeBlocks"],
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -252,7 +252,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -280,7 +280,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             "weightMoreThanFiftyKg",
             "wasTatooedInPlaceNotCertified",
           ],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             appointmentType: { type: "string", enum: ["D", "M"] },
             // timeBlockId chega como string e é convertido para BigInt na lógica
@@ -297,7 +297,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -307,7 +307,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -330,7 +330,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         body: {
           type: "object",
           required: ["shift", "date", "amountOfDonors"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             shift: { type: "string", enum: ["morning", "afternoon"] },
             // date chega como string (ex.: YYYY-MM-DD) e é convertida para Date na lógica (z.coerce.date())
@@ -341,24 +341,24 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           201: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
-              appointment: { type: "object", additionalProperties: false },
+              appointment: { type: "object", additionalProperties: true },
             },
             required: ["appointment"],
           },
           400: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               message: { type: "string" },
-              issues: { type: "array", items: { type: "object", additionalProperties: false } },
+              issues: { type: "array", items: { type: "object", additionalProperties: true } },
             },
             required: ["message"],
           },
           401: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -368,13 +368,13 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           404: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
@@ -394,7 +394,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         body: {
           type: "object",
           required: ["protocol"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             protocol: { type: "string", minLength: 1 },
           },
@@ -402,7 +402,7 @@ export async function appointmentsRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               success: { type: "boolean" },
             },
@@ -410,13 +410,13 @@ export async function appointmentsRoutes(app: FastifyInstance) {
           },
           400: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },
           500: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: "string" } },
             required: ["message"],
           },

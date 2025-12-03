@@ -24,4 +24,6 @@ export interface StorageProvider {
     fileType: string,
     folder?: string
   ): Promise<PresignResult>;
+
+  getPresignedUrlFromKey(key: string): Promise<string>;
 }

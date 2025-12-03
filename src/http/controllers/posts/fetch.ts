@@ -30,7 +30,7 @@ export async function fetchPosts(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(200).send(posts);
   } catch (err) {
     if (err instanceof PostNotFoundError) {
-      return reply.status(404).send({ message: err.message });
+      return reply.status(200).send([]);
     } else {
       // console.log(err);
       return reply.status(500).send({ message: "Internal server error." });

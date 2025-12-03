@@ -15,7 +15,7 @@ export async function authRoutes(app: FastifyInstance) {
         body: {
           type: "object",
           required: ["email", "password"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             email: { type: "string", format: "email" },
             password: { type: "string", minLength: 6 },
@@ -25,7 +25,7 @@ export async function authRoutes(app: FastifyInstance) {
           200: {
             description: "Login realizado com sucesso",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               token: { type: "string" },
               refreshToken: { type: "string" },
@@ -35,7 +35,7 @@ export async function authRoutes(app: FastifyInstance) {
           400: {
             description: "Credenciais inválidas",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               message: { type: "string" },
             },
@@ -59,7 +59,7 @@ export async function authRoutes(app: FastifyInstance) {
           200: {
             description: "Token renovado com sucesso",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               token: { type: "string" },
             },
@@ -68,7 +68,7 @@ export async function authRoutes(app: FastifyInstance) {
           401: {
             description: "Refresh token inválido ou ausente",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: "number" },
               error: { type: "string" },
@@ -93,7 +93,7 @@ export async function authRoutes(app: FastifyInstance) {
         body: {
           type: "object",
           required: ["idToken"],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             idToken: { type: "string", minLength: 20 },
           },
@@ -101,7 +101,7 @@ export async function authRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               token: { type: "string" },
               refreshToken: { type: "string" },
@@ -111,7 +111,7 @@ export async function authRoutes(app: FastifyInstance) {
           403: {
             description: "Email do Google não verificado",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               message: { type: "string" },
             },
@@ -120,7 +120,7 @@ export async function authRoutes(app: FastifyInstance) {
           400: {
             description: "Erro de validação do corpo (Zod)",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               message: { type: "string" },
             },
@@ -129,7 +129,7 @@ export async function authRoutes(app: FastifyInstance) {
           500: {
             description: "Erro interno",
             type: "object",
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               message: { type: "string" },
             },

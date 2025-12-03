@@ -15,7 +15,7 @@ export async function usersRoutes(app: FastifyInstance) {
         body: {
           type: 'object',
           required: ['name', 'email', 'password', 'cpf'],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             name: { type: 'string', minLength: 1 },
             email: { type: 'string', format: 'email' },
@@ -27,19 +27,19 @@ export async function usersRoutes(app: FastifyInstance) {
           201: { type: 'null' },
           400: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
           409: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
           500: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },
@@ -62,7 +62,7 @@ export async function usersRoutes(app: FastifyInstance) {
         body: {
           type: 'object',
           required: ['phone', 'sex', 'bloodType', 'dateOfBirth'],
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             phone: { type: 'string', minLength: 8, maxLength: 20 },
             sex: { type: 'string', enum: ['M', 'F', 'OTHER'] },
@@ -74,7 +74,7 @@ export async function usersRoutes(app: FastifyInstance) {
         response: {
           200: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               id: { type: 'string' },
               userId: { type: 'string' },
@@ -91,7 +91,7 @@ export async function usersRoutes(app: FastifyInstance) {
           },
           401: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: {
               statusCode: { type: 'number' },
               error: { type: 'string' },
@@ -101,7 +101,7 @@ export async function usersRoutes(app: FastifyInstance) {
           },
           500: {
             type: 'object',
-            additionalProperties: false,
+            additionalProperties: true,
             properties: { message: { type: 'string' } },
             required: ['message'],
           },

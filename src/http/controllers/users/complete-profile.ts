@@ -22,8 +22,15 @@ export async function completeProfile(
   };
 
   
+  const phoneSchema = z
+  .string()
+  .transform((val) => val.replace(/\D/g, "")) 
+  .refine((val) => val.length >= 8 && val.length <= 20, {
+    message: "phone must have between 8 and 20 digits",
+  });
+  
   const bodySchema = z.object({
-    phone: z.string().min(8).max(20),
+    phone: phoneSchema,
     sex: z.enum(sexes),
     bloodType: z.enum(bloodTypes),
     dateOfBirth: z.coerce.date(),
