@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { register } from './register'
 import { verifyJwt } from '../../middlewares/verify-jwt'
 import { completeProfile } from './complete-profile'
+import { getUserProfile } from './get-user-profile'
 
 export async function usersRoutes(app: FastifyInstance) {
   // POST /users — Registro
@@ -109,5 +110,19 @@ export async function usersRoutes(app: FastifyInstance) {
       },
     },
     completeProfile
+  )
+
+  // GET /users/me/profile — Obter perfil do usuário autenticado
+  app.get(
+    '/users/me/profile',
+    {
+      onRequest: [verifyJwt],
+      schema: {
+        tags: ['Users'],
+        summary: 'Obter perfil do usuário autenticado',
+        description: 'Retorna os dados do perfil do usuário autenticado.',
+      },
+    },
+    getUserProfile
   )
 }
