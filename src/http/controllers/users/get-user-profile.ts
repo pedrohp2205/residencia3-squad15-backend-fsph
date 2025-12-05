@@ -9,6 +9,8 @@ export async function getUserProfile(
 
   const result = await useCase.execute({ userId: request.user.sub });
 
+
+
   const { profile } = result; 
 
 

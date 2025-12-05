@@ -7,42 +7,56 @@ export async function MakeDonationAppointment(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-
   try {
 
     const makeDonationAppointmentBodySchema = z.object({
       appointmentType: z.enum(["D", "M"]),
-      timeBlockId: z.string().transform((id) => BigInt(id)),
+      timeBlockId: z.string().min(1, "timeBlockId é obrigatório"),
       firstTimeDonating: z.boolean(),
       weightMoreThanFiftyKg: z.boolean(),
       wasTatooedInPlaceNotCertified: z.boolean(),
-    })
+    });
 
-    const { appointmentType, timeBlockId, firstTimeDonating, weightMoreThanFiftyKg, wasTatooedInPlaceNotCertified } = makeDonationAppointmentBodySchema.parse(request.body);
-
-
-    const donorId = request.user.sub;
-
-    const makeDonationAppointmentUseCase = makeMakeDonationAppointmentUseCase();
-
-    await makeDonationAppointmentUseCase.execute({
-      userId: donorId,
+    const {
       appointmentType,
       timeBlockId,
       firstTimeDonating,
       weightMoreThanFiftyKg,
       wasTatooedInPlaceNotCertified,
-    });
+    } = makeDonationAppointmentBodySchema.parse(request.body);
 
+    const donorId = request.user.sub;
+
+    const makeDonationAppointmentUseCase = makeMakeDonationAppointmentUseCase();
+
+
+    await makeDonationAppointmentUseCase.execute({
+      userId: donorId,
+      appointmentType,
+      timeBlockId: Number(timeBlockId),
+      firstTimeDonating,
+      weightMoreThanFiftyKg,
+      wasTatooedInPlaceNotCertified,
+    });
 
     return reply.status(201).send();
   } catch (err) {
-    console.log(err)
     if (err instanceof ProfileNotCompletedError) {
-      return reply.status(400).send({ message: "Seu perfil deve estar completo para continuar."});
+      return reply
+        .status(400)
+        .send({ message: "Seu perfil deve estar completo para continuar." });
     }
-    return reply.status(500).send({ message: "Internal server error." });
+
+    // erro de validação do Zod
+    if (err instanceof z.ZodError) {
+      return reply.status(400).send({
+        message: "Dados inválidos.",
+        errors: err.flatten(),
+      });
+    }
+
+    return reply
+      .status(500)
+      .send({ message: err || "Internal server error." });
   }
 }
-
-

@@ -8,7 +8,7 @@ import { PreScreeningRepository } from "@/repositories/pre-screening-repository"
 interface MakeDonationAppointmentUseCaseRequest {
   userId: string;
   appointmentType: "D" | "M";
-  timeBlockId: bigint;
+  timeBlockId: number;
   firstTimeDonating: boolean;
   weightMoreThanFiftyKg: boolean;
   wasTatooedInPlaceNotCertified: boolean;
@@ -54,10 +54,10 @@ export class MakeDonationAppointmentUseCase {
 
 
     const response = await this.fpshGateway.makeAnAppointment({
-      donorName: user.name,
+      donorName: user.name!,
       donorBirthDate: profile.birthDate!.toISOString(),
       donorEmail: user.email,
-      donorCpf: user.cpf,
+      donorCpf: user.cpf!,
       donorPhone: profile.phone!,
       donorGender: profile.gender!,
       type: appointmentType,

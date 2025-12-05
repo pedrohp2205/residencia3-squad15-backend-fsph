@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { makeCompleteProfileUseCase } from "../../../use-cases/factories/make-complete-profile-use-case";
 import type { BloodType } from "@prisma/client";
+import { ProfileAlreadyCompletedError } from "@/use-cases/errors/profile-already-completed-error";
+import tr from "zod/v4/locales/tr.cjs";
 
 export async function completeProfile(
   request: FastifyRequest,
@@ -60,8 +62,13 @@ export async function completeProfile(
     cpf,
   };
 
+
+  try {
+
   const result = await useCase.execute(payload);
+
   const { profile } = result;
+
 
   return reply.status(200).send({
     id: profile.id,
@@ -71,4 +78,9 @@ export async function completeProfile(
     bloodType: profile.bloodType,
     completed: profile.completed,
   });
+  }catch (err) {
+      if (err instanceof ProfileAlreadyCompletedError) {
+        return reply.status(409).send({ message: err.message });
+      }
+    }
 }

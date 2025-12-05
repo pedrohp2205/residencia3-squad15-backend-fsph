@@ -1,36 +1,50 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { z } from "zod";
 
 export async function refresh(request: FastifyRequest, reply: FastifyReply) {
-  await request.jwtVerify({ onlyCookie: true });
+  const bodySchema = z.object({
+    refreshToken: z.string().min(1).optional(),
+  });
 
-  const token = await reply.jwtSign(
-    {},
-    {
-      sign: {
-        sub: request.user.sub,
-      },
-    }
-  );
+  const { refreshToken } = bodySchema.parse(request.body ?? {});
 
-  const refreshToken = await reply.jwtSign(
-    {},
-    {
-      sign: {
-        sub: request.user.sub,
-        expiresIn: "7d",
-      },
-    }
-  );
+  const cookieRefreshToken =
+    
+    (request.cookies as any)?.Authorization ||
+    (request.cookies as any)?.refreshToken;
 
-  return reply
-    .setCookie("refreshToken", refreshToken, {
-      path: "/",
-      secure: true,
-      sameSite: true,
-      httpOnly: true,
-    })
-    .status(200)
-    .send({
-      token,
+  const rawRefreshToken = refreshToken ?? cookieRefreshToken;
+
+  if (!rawRefreshToken) {
+    return reply.status(401).send({
+      statusCode: 401,
+      error: "Unauthorized",
+      message: "Refresh token não encontrado",
     });
+  }
+
+  try {
+
+    const payload = await request.server.jwt.verify(rawRefreshToken);
+    const { sub } = payload as { sub: string };
+
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub,
+        },
+      }
+    );
+
+    return reply.status(200).send({ token });
+  } catch (err) {
+    console.log("Erro ao verificar refresh token:", err);
+
+    return reply.status(401).send({
+      statusCode: 401,
+      error: "Unauthorized",
+      message: "Refresh token inválido ou expirado",
+    });
+  }
 }

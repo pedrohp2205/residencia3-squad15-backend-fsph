@@ -290,28 +290,6 @@ export async function appointmentsRoutes(app: FastifyInstance) {
             wasTatooedInPlaceNotCertified: { type: "boolean" },
           },
         },
-        response: {
-          201: {
-            type: "null",
-            nullable: true,
-          },
-          401: {
-            type: "object",
-            additionalProperties: true,
-            properties: {
-              statusCode: { type: "number" },
-              error: { type: "string" },
-              message: { type: "string" },
-            },
-            required: ["statusCode", "error", "message"],
-          },
-          500: {
-            type: "object",
-            additionalProperties: true,
-            properties: { message: { type: "string" } },
-            required: ["message"],
-          },
-        },
       },
     },
     MakeDonationAppointment
